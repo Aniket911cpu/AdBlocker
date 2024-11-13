@@ -54,4 +54,18 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For questions or support, please contact us at support@adblocker.com.
+## File Structure
+
+Here is an overview of the files in this project and their purposes:
+
+- `manifest.json`: Contains metadata about the extension, including its name, version, and permissions.
+- `background.js`: Handles background tasks such as ad detection and blocking.
+- `content.js`: Injected into web pages to identify and block ads.
+- `popup.html`: The HTML file for the extension's popup interface.
+- `popup.js`: Manages the behavior and functionality of the popup interface.
+- `styles.css`: Contains the CSS styles for the popup interface.
+- `filters.txt`: A customizable list of ad filters used by the extension.
+- `README.md`: Provides an overview of the project, installation instructions, and usage guidelines.
+- `LICENSE`: The license file for the project.
+
+Each file plays a crucial role in ensuring the AdBlocker extension functions correctly and provides a seamless user experience.
