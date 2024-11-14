@@ -1,37 +1,35 @@
-// Content script to block ads
-
-// Listen for messages from the background script
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message === "block_ads") {
-      // Block ads here
-      // Example: document.querySelectorAll('.ad').forEach(ad => ad.remove());
-    }
-    // Content script to block ads efficiently
-
-// Use efficient selectors to target ads on websites
+// List of selectors for ads
 const adSelectors = [
-    ".ad",
-    ".advertisement",
-    ".ad-banner",
-    // Add more selectors as needed
-  ];
-  
-  // Block ads based on selectors
-  function blockAds() {
-    adSelectors.forEach(selector => {
-      document.querySelectorAll(selector).forEach(ad => ad.remove());
-    });
+  ".ad",
+  ".advertisement",
+  ".ad-banner",
+  // Add more selectors as needed for different websites
+];
+
+// Function to block ads based on the selectors
+function blockAds() {
+  let adsBlocked = 0;
+  adSelectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(ad => {
+          ad.remove();
+          adsBlocked++;  // Count how many ads were removed
+      });
+  });
+
+  // Store the number of ads blocked in chrome.storage.local
+  chrome.storage.local.get("adsBlocked", function (result) {
+      let currentCount = result.adsBlocked || 0;
+      chrome.storage.local.set({ "adsBlocked": currentCount + adsBlocked });
+  });
+}
+
+// Listen for messages from the background script to block or unblock ads
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  if (message === "block_ads") {
+      blockAds();  // Call the function to block ads
   }
-  
-  // Listen for messages from the background script
-  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message === "block_ads") {
-      blockAds();
-    }
-  });
-  
-  });
-  /*This is a basic setup. You'd need to fill in the actual ad blocking logic in content.js based on how 
-    you want to block ads. Also, the code to count and update the number of ads blocked would need to be implemented. 
-    The icons and logo referenced in the manifest file (icon16.png, icon48.png, icon128.png, and logo.png) should be present in the extension directory.
-     Additionally,consider implementing more robust error handling and refining the functionality to suit your needs.*/
+  if (message === "unblock_ads") {
+      // Handle unblocking ads if needed (could be an undo action)
+      console.log("Ads are unblocked.");
+  }
+});
